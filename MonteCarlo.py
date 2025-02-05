@@ -21,22 +21,32 @@ from random import randint
 
 # n is the limit.
 
-def monte_carlo_approach(n) :
-    win_table = {}
-    for i in range(n-5,n+1) :
-        win_table[i] = 0
+def monte_carlo_approach(n):
+    win_table = {i: 0 for i in range(n - 5, n + 1)}
 
-    for hold_val in (n-5,n+1) :
-        for i in range(100000) :
-        ## you do this part. My solution is under 20 lines of code. Yours can be longer, but if it's getting
-        ## really big, take a step back and rethink.
+    for hold_val in range(n - 5, n + 1):
+        for _ in range(1000000):
+            player1_score = 0
+            while player1_score < hold_val:
+                roll = randint(1, 6)
+                player1_score += roll
+                if player1_score > n:
+                    player1_score = 0
+                    break
 
-        ## player 1 plays
+            if player1_score == 0:
+                continue
 
+            player2_score = 0
+            while player2_score < player1_score:
+                roll = randint(1, 6)
+                player2_score += roll
+                if player2_score > n:
+                    win_table[hold_val] += 1
+                    break
 
-        ## player 1 done. Did they exceed n?
-        ## if not, player 2 plays
-        ## player 2 > player1?
+    for item in win_table.keys():
+        print("%d: %f" % (item, win_table[item] / 1000000))
 
-    for item in win_table.keys() :
-        print("%d: %f" % (item, win_table[item]/1000000))
+# Example usage
+monte_carlo_approach(10)
